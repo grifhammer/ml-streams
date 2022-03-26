@@ -9,6 +9,10 @@
       "path": "backend/infra"
     },
     {
+      "name": "nginx-rtmp",
+      "path": "backend/nginx-rtmp"
+    },
+    {
       "name": "web-frontend",
       "path": "web"
     }
@@ -16,6 +20,7 @@
   "settings": {
     "eslint.workingDirectories": [
       "./backend/infra",
+      "./backend/nginx-rtmp",
       "./web"
     ],
     "jest.disabledWorkspaceFolders": [

@@ -1,4 +1,4 @@
-import { awscdk, web } from "projen";
+import { awscdk, Project, web } from "projen";
 import { TurborepoProject } from "projen-turborepo";
 const project = new TurborepoProject({
 	defaultReleaseBranch: "main",
@@ -31,4 +31,9 @@ new awscdk.AwsCdkTypeScriptApp({
 	cdkVersion: "2.17.0",
 });
 
+const streamingServerProject = new Project({
+	parent: project,
+	name: "nginx-rtmp",
+	outdir: "backend/nginx-rtmp",
+});
 project.synth();
