@@ -6,7 +6,7 @@
     },
     {
       "name": "ml-streams-backend",
-      "path": "backend\\infra"
+      "path": "backend/infra"
     },
     {
       "name": "web-frontend",
@@ -15,7 +15,7 @@
   ],
   "settings": {
     "eslint.workingDirectories": [
-      "./backend\\infra",
+      "./backend/infra",
       "./web"
     ],
     "jest.disabledWorkspaceFolders": [
