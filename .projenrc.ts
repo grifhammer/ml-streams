@@ -1,12 +1,30 @@
+import { awscdk, web } from "projen";
 import { TurborepoProject } from "projen-turborepo";
 const project = new TurborepoProject({
-  defaultReleaseBranch: "main",
-  devDeps: ["projen-turborepo"],
-  name: "ml-streams",
-  projenrcTs: true,
+	defaultReleaseBranch: "main",
+	devDeps: ["projen-turborepo"],
+	name: "ml-streams",
+	projenrcTs: true,
+	projectReferences: true,
+	vscodeMultiRootWorkspaces: true,
+	parallelWorkflows: true,
 
-  // deps: [],                /* Runtime dependencies of this module. */
-  // description: undefined,  /* The description is just a string that helps people understand the purpose of the package. */
-  // packageName: undefined,  /* The "name" in package.json. */
+	description: "A machine vision video streaming project",
+	// packageName: undefined,  /* The "name" in package.json. */
+});
+
+new web.ReactTypeScriptProject({
+	parent: project,
+	defaultReleaseBranch: "main",
+	name: "web-frontend",
+	outdir: "web",
+});
+
+new awscdk.AwsCdkTypeScriptApp({
+	parent: project,
+	defaultReleaseBranch: "main",
+	name: "ml-streams-backend",
+	outdir: "backend/infra",
+	cdkVersion: "2.17.0",
 });
 project.synth();

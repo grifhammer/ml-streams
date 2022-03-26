@@ -22,15 +22,12 @@
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
     "stripInternal": true,
-    "target": "ES2019",
-    "composite": true
+    "target": "ES2019"
   },
   "include": [
     ".projenrc.js",
     "src/**/*.ts",
-    "test/**/*.ts",
-    ".projenrc.ts",
-    "projenrc/**/*.ts"
+    "test/**/*.ts"
   ],
   "exclude": [
     "node_modules"
