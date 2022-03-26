@@ -8,7 +8,10 @@ const project = new TurborepoProject({
 	projectReferences: true,
 	vscodeMultiRootWorkspaces: true,
 	parallelWorkflows: true,
-
+	eslintOptions: {
+		prettier: true,
+		dirs: [],
+	},
 	description: "A machine vision video streaming project",
 	// packageName: undefined,  /* The "name" in package.json. */
 });
@@ -27,4 +30,5 @@ new awscdk.AwsCdkTypeScriptApp({
 	outdir: "backend/infra",
 	cdkVersion: "2.17.0",
 });
+
 project.synth();
