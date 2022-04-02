@@ -31,7 +31,7 @@ new awscdk.AwsCdkTypeScriptApp({
 	cdkVersion: "2.17.0",
 });
 
-const streamingServerProject = new Project({
+new Project({
 	parent: project,
 	name: "nginx-rtmp",
 	outdir: "backend/nginx-rtmp",

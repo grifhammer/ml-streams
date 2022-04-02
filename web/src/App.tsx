@@ -1,24 +1,24 @@
-import logo from './logo.svg';
-import './App.css'
+import "./App.css";
 
 function App() {
-  return (
-   <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	return (
+		<div className="App">
+			<video
+				id="player"
+				className="video-js vjs-default-skin"
+				height="360"
+				width="640"
+				controls
+				preload="none"
+			>
+				<source
+					src="https://twitter.com/i/status/1508237357547458570"
+					type="application/x-mpegURL"
+				/>
+			</video>
+			<script>var player = videojs('#player');</script>
+		</div>
+	);
 }
 
 export default App;

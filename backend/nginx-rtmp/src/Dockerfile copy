@@ -1,0 +1,97 @@
+ARG version
+ARG timezone=America/Los_Angeles
+ARG modules_dir="/usr/lib/nginx/modules"
+
+
+################################################################
+# BUILDER
+#
+# Compile brotli and zstd from source to use it in a standard
+# NGINX image container.
+################################################################
+
+FROM debian:stable AS builder
+
+ARG version
+ARG modules_dir
+ARG build_dir="/usr/share/tmp"
+
+# Setup
+RUN apt-get update
+RUN apt-get install -y --no-install-recommends \
+    ca-certificates \
+    wget \
+    git \
+    build-essential \
+    libpcre3 \
+    libpcre3-dev \
+    libssl-dev \ 
+    zlib1g-dev
+
+RUN mkdir -p ${build_dir}
+RUN mkdir -p ${modules_dir}
+
+# Download NGINX
+RUN cd ${build_dir} \
+    && wget https://nginx.org/download/nginx-${version}.tar.gz \
+    && tar zxf nginx-${version}.tar.gz \
+    && rm nginx-${version}.tar.gz
+
+# Download Modules
+RUN cd ${build_dir} \
+    && git clone --recursive https://github.com/sergey-dryabzhinsky/nginx-rtmp-module.git nginx-rtmp 
+
+# Install modules
+RUN cd ${build_dir}/nginx-${version} \
+    && ./configure --with-http_ssl_module --add-module=../nginx-rtmp \
+    && make -j 1 \
+    && make install
+
+# Move compiled modules
+RUN cd ${build_dir}/nginx-${version}/objs \
+    # && cp ngx_http_brotli_static_module.so ${modules_dir} \
+    # && cp ngx_http_brotli_filter_module.so ${modules_dir} \
+    # && cp ngx_http_zstd_static_module.so ${modules_dir} \
+    # && cp ngx_http_zstd_filter_module.so ${modules_dir} \
+    && chmod -R 644 ${modules_dir}
+
+
+################################################################
+# SERVER
+################################################################
+
+FROM nginx:${version}-alpine
+
+ARG timezone
+ARG modules_dir
+
+# COPY --from=builder ${modules_dir}/* ${modules_dir}/
+
+COPY dist/aqua                    /var/www
+COPY docker/nginx/share/*         /usr/share/
+
+# Configure System
+RUN cp /usr/share/zoneinfo/${timezone} /etc/localtime
+RUN echo "${timezone}" > /etc/timezone
+COPY docker/nginx/entrypoint.sh /
+RUN chmod +x /entrypoint.sh
+
+# Moves files and set permissions
+COPY docker/nginx/certs/* /etc/nginx/certs/
+COPY docker/nginx/components/ /etc/nginx/components/
+RUN mv /etc/nginx/conf.d/ /etc/nginx/conf.d-copy/
+COPY docker/nginx/conf.d/ /etc/nginx/conf.d/
+RUN chmod +x /usr/share/*.sh
+RUN mv /etc/nginx/nginx.conf /etc/nginx/nginx-backup.conf
+COPY docker/nginx/nginx.conf /etc/nginx/nginx.conf
+
+
+################################################################
+
+EXPOSE 80
+EXPOSE 443/tcp
+EXPOSE 443/udp
+
+ENTRYPOINT ["/entrypoint.sh"]
+
+CMD ["nginx-debug", "-g", "daemon off;"]
