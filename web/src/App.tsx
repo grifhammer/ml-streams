@@ -12,7 +12,7 @@ function App() {
 				preload="none"
 			>
 				<source
-					src="https://twitter.com/i/status/1508237357547458570"
+					src="http://localhost:8080/hls/stream.m3u8"
 					type="application/x-mpegURL"
 				/>
 			</video>

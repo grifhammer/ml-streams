@@ -1,11 +1,8 @@
-cd /tmp/build/nginx && \
-    FROM buildpack-deps:stretch
-
-LABEL maintainer="Sebastian Ramirez <tiangolo@gmail.com>"
+FROM buildpack-deps:stretch
 
 # Versions of Nginx and nginx-rtmp-module to use
 ENV NGINX_VERSION nginx-1.18.0
-ENV NGINX_RTMP_MODULE_VERSION 1.1.7.10
+ENV NGINX_RTMP_MODULE_VERSION 1.2.2
 
 # Install dependencies
 RUN apt-get update && \
@@ -21,7 +18,7 @@ RUN mkdir -p /tmp/build/nginx && \
 # Download and decompress RTMP module
 RUN mkdir -p /tmp/build/nginx-rtmp-module && \
     cd /tmp/build/nginx-rtmp-module && \
-    wget -O nginx-rtmp-module-${NGINX_RTMP_MODULE_VERSION}.tar.gz https://github.com/sergey-dryabzhinsky/nginx-rtmp-module/archive/v${NGINX_RTMP_MODULE_VERSION}.tar.gz && \
+    wget -O nginx-rtmp-module-${NGINX_RTMP_MODULE_VERSION}.tar.gz https://github.com/arut/nginx-rtmp-module/archive/v${NGINX_RTMP_MODULE_VERSION}.tar.gz && \
     tar -zxf nginx-rtmp-module-${NGINX_RTMP_MODULE_VERSION}.tar.gz && \
     cd nginx-rtmp-module-${NGINX_RTMP_MODULE_VERSION}
 
@@ -51,6 +48,7 @@ RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
     ln -sf /dev/stderr /var/log/nginx/error.log
 
 # Set up config file
+RUN pwd
 COPY nginx.conf /etc/nginx/nginx.conf
 
 EXPOSE 1935
