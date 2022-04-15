@@ -21,6 +21,7 @@ new web.ReactTypeScriptProject({
 	defaultReleaseBranch: "main",
 	name: "web-frontend",
 	outdir: "web",
+	deps: ["eslint-config-react-app"],
 });
 
 new awscdk.AwsCdkTypeScriptApp({

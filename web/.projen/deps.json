@@ -44,6 +44,10 @@
       "type": "build"
     },
     {
+      "name": "eslint-config-react-app",
+      "type": "runtime"
+    },
+    {
       "name": "react",
       "type": "runtime"
     },
